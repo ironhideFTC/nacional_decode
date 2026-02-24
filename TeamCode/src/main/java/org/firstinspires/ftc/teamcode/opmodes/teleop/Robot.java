@@ -15,6 +15,10 @@ public class Robot extends OpMode {
     Impulse impulse = new Impulse();
     Shooter shooter = new Shooter();
 
+    boolean lastRB = false;
+    boolean lastLB = false;
+    boolean lastA = false;
+
     @Override
     public void init() {
         mecanumDrive.init(hardwareMap);
@@ -28,12 +32,38 @@ public class Robot extends OpMode {
         mecanumDrive.driveControl(
                 gamepad1.left_stick_x,
                 gamepad1.left_stick_y,
-                gamepad1.right_stick_x
+                -gamepad1.right_stick_x
         );
-        mecanumDrive.driveIMU(hardwareMap);
-        intake.setPower(gamepad2.right_bumper);
-        impulse.setPosition(gamepad2.a);
 
-        telemetry.addData("Impulse position", impulse.getPosition());
+        if(gamepad1.a) {
+            mecanumDrive.resetYaw();
+        }
+
+        if(gamepad2.right_bumper && !lastRB) {
+            intake.toggle();
+        }
+        lastRB = gamepad2.right_bumper;
+
+        if(gamepad2.left_bumper && !lastLB) {
+            shooter.toggle();
+        }
+        lastLB = gamepad2.left_bumper;
+
+        if(gamepad2.a && !lastA) {
+            impulse.toggle();
+        }
+        lastA = gamepad2.a;
+
+        intake.update();
+        shooter.update();
+        impulse.update();
+
+        double[] v = mecanumDrive.getVelocity();
+
+        telemetry.addData("FL Velocity", v[0]);
+        telemetry.addData("FR Velocity", v[1]);
+        telemetry.addData("BL Velocity", v[2]);
+        telemetry.addData("BR Velocity", v[3]);
+        telemetry.update();
     }
 }

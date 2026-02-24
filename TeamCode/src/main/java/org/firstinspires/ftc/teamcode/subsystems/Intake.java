@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
     private DcMotor intake;
+    private boolean active = false;
 
     public void init(HardwareMap hw) {
         intake = hw.get(DcMotor.class, "intake");
@@ -14,11 +15,9 @@ public class Intake {
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void setPower(boolean active) {
-        if(active) {
-            intake.setPower(1);
-        } else {
-            intake.setPower(0);
-        }
-    }
+    public void toggle() { active = !active; }
+
+    public void update() { intake.setPower(active ? 0.8 : 0); }
+
+    public void setPower(double power) { intake.setPower(power); }
 }

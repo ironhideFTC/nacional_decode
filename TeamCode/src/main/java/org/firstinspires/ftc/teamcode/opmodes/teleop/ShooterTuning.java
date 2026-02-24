@@ -10,23 +10,24 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 @TeleOp
 public class ShooterTuning extends OpMode {
     public DcMotorEx shooter;
-    public double highVelocity = 1500;
-    public double lowVelocity = 900;
+    public double highVelocity = 3500;
+    public double lowVelocity = 2000;
     double curTargetVelocity = highVelocity;
 
     double F = 0;
     double P = 0;
 
-    double[] stepSizes = {10.0, 1.0, 0.1, 0.001, 0.0001};
+    double[] stepSizes = {10.0, 1.0, 0.1, 0.01, 0.001};
     int stepIndex = 1;
 
     @Override
     public void init() {
         shooter = hardwareMap.get(DcMotorEx.class, "shooter");
-        shooter.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        shooter.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         shooter.setDirection(DcMotorSimple.Direction.FORWARD);
+
         PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0, 0, F);
-        shooter.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         telemetry.addLine("Init Complete");
     }
 
@@ -66,7 +67,7 @@ public class ShooterTuning extends OpMode {
         shooter.setVelocity(curTargetVelocity);
 
         double curVelocity = shooter.getVelocity();
-        double error = curTargetVelocity = curVelocity;
+        double error = curTargetVelocity - curVelocity;
 
         telemetry.addData("Target Velocity", curTargetVelocity);
         telemetry.addData("Current Velocity", "%.2f", curVelocity);
