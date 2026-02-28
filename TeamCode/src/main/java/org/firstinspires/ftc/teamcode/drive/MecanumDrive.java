@@ -12,6 +12,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class MecanumDrive {
     private DcMotorEx backRight, backLeft, frontRight, frontLeft;
     private IMU imu;
+    private boolean active = false;
+    //public static double REAR_GAIN = 0.9;
 
     public void init(HardwareMap hw) {
         backRight = hw.get(DcMotorEx.class, "backRight");
@@ -57,10 +59,13 @@ public class MecanumDrive {
         double frontRightPower = (rotY - rotX - rotate) / denominator;
         double backRightPower = (rotY + rotX - rotate) / denominator;
 
-        frontLeft.setPower(frontLeftPower);
-        backLeft.setPower(backLeftPower);
-        frontRight.setPower(frontRightPower);
-        backRight.setPower(backRightPower);
+        //backLeftPower *= REAR_GAIN;
+        //backRightPower *= REAR_GAIN;
+
+        frontLeft.setPower(frontLeftPower * this.setVelocity());
+        backLeft.setPower(backLeftPower * this.setVelocity());
+        frontRight.setPower(frontRightPower * this.setVelocity());
+        backRight.setPower(backRightPower * this.setVelocity());
     }
 
     public void resetYaw() {
@@ -74,5 +79,19 @@ public class MecanumDrive {
                 backLeft.getVelocity(),
                 backRight.getVelocity()
         };
+    }
+
+    public void toggle() { active = !active; }
+
+    public double setVelocity() {
+        double power;
+
+        if(active) {
+            power = 1;
+        } else {
+            power = 0.8;
+        }
+
+        return power;
     }
 }

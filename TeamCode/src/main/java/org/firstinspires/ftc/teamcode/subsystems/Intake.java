@@ -20,4 +20,10 @@ public class Intake {
     public void update() { intake.setPower(active ? 0.8 : 0); }
 
     public void setPower(double power) { intake.setPower(power); }
+
+    public boolean status() {
+        double power = intake.getPower();
+
+        return power > 0;
+    }
 }

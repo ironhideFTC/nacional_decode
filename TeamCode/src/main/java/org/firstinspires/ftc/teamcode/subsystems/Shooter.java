@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 public class Shooter {
     private DcMotorEx shooter;
     private boolean active;
-    private static final double P = 5;
+    private static final double P = 10;
     private static final double F = 25;
 
     public void init(HardwareMap hw) {
@@ -25,7 +25,13 @@ public class Shooter {
         active = !active;
     }
 
-    public void update() { shooter.setVelocity(active ? 3500 : 0); }
+    public void update() { shooter.setVelocity(active ? 6000 : 0); }
 
     public void setVelocity(double velocity) { shooter.setVelocity(velocity); }
+
+    public boolean status() {
+        double velocity = shooter.getVelocity();
+
+        return velocity > 0;
+    }
 }

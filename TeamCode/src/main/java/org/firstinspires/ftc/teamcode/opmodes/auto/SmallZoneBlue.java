@@ -10,7 +10,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.Impulse;
+import org.firstinspires.ftc.teamcode.subsystems.Servos;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
@@ -19,7 +19,7 @@ public class SmallZoneBlue extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         MecanumDrive mecanumDrive = new MecanumDrive(hardwareMap, new Pose2d(-9, -61, Math.toRadians(270)));
         Intake intake = new Intake();
-        Impulse impulse = new Impulse();
+        Servos impulse = new Servos();
         Shooter shooter = new Shooter();
 
         intake.init(hardwareMap);
@@ -73,9 +73,9 @@ public class SmallZoneBlue extends LinearOpMode {
     public static class shooter implements Action {
         Shooter shooter;
         double velocity;
-        Impulse impulse;
+        Servos impulse;
 
-        public shooter(Shooter shooter, double velocity, Impulse impulse) {
+        public shooter(Shooter shooter, double velocity, Servos impulse) {
             this.shooter = shooter;
             this.velocity = velocity;
             this.impulse = impulse;
