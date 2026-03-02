@@ -7,8 +7,17 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Servos;
+
 @TeleOp
 public class ShooterTuning extends OpMode {
+    Intake intake = new Intake();
+    Servos servos = new Servos();
+
+    boolean lastRB = false;
+    boolean lastA = false;
+
     public DcMotorEx shooter;
     public double highVelocity = 3500;
     public double lowVelocity = 2000;
@@ -22,6 +31,9 @@ public class ShooterTuning extends OpMode {
 
     @Override
     public void init() {
+        intake.init(hardwareMap);
+        servos.init(hardwareMap);
+
         shooter = hardwareMap.get(DcMotorEx.class, "shooter");
         shooter.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         shooter.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -33,6 +45,16 @@ public class ShooterTuning extends OpMode {
 
     @Override
     public void loop() {
+        if(gamepad2.right_bumper && !lastRB) {
+            intake.toggle();
+        }
+        lastRB = gamepad2.right_bumper;
+
+        if(gamepad2.a && !lastA) {
+            servos.toggle();
+        }
+        lastA = gamepad2.a;
+
         if(gamepad1.yWasPressed()) {
             if(curTargetVelocity == highVelocity) {
                 curTargetVelocity = lowVelocity;
